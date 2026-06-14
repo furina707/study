@@ -1,0 +1,4 @@
+### UContent - 获取课程详情
+
+GET https://ucontent.unipus.cn/course/api/v4/lms/course/details?courseId={{course_id}}
+X-Annotator-Auth-Token: {{jwt_token}}

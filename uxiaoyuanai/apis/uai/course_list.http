@@ -1,0 +1,4 @@
+### UAI - 获取课程列表
+
+GET https://uai.unipus.cn/learn/api/v2/course/list
+X-Annotator-Auth-Token: {{jwt_token}}

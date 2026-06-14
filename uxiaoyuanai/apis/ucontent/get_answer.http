@@ -1,0 +1,4 @@
+### UContent - 获取答案与解析
+
+GET https://ucontent.unipus.cn/course/api/v3/answer/{{course_id}}/{{group_id}}/{{mode}}
+X-Annotator-Auth-Token: {{jwt_token}}

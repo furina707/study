@@ -1,0 +1,4 @@
+### 获取验证码
+### 当登录返回 code=1502 时调用
+
+POST https://sso.unipus.cn/sso/4.0/sso/image_captcha2

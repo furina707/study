@@ -1,0 +1,4 @@
+### UContent - 获取课程内容
+
+GET https://ucontent.unipus.cn/course/api/v3/content/{{course_id}}/{{group_id}}/default
+X-Annotator-Auth-Token: {{jwt_token}}

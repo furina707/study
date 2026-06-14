@@ -1,0 +1,141 @@
+### U校园 API 调试文件
+### 使用方法：
+### 1. 安装 VS Code REST Client 插件
+### 2. 填写下方的 @username 和 @password
+### 3. 点击 "Send Request" 发送请求
+
+@base_url = https://ucontent.unipus.cn
+@sso_url = https://sso.unipus.cn
+@uai_url = https://uai.unipus.cn
+
+### 请填写你的账号信息
+@username = 17716841865
+@password = ff@00000
+
+### 登录后会自动填充这些变量
+@open_id = 
+@service_ticket = 
+@jwt_token = 
+@course_id = course-v2:75bd6c9770028fd+ljddzg_rw+20230403
+
+
+# ==================== SSO 登录 ====================
+
+### 1. SSO 登录（获取 serviceTicket 和 openId）
+# @name sso_login
+POST {{sso_url}}/sso/0.1/sso/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+
+{
+  "service": "https://u.unipus.cn/user/comm/login?school_id=",
+  "username": "{{username}}",
+  "password": "{{password}}",
+  "captcha": "",
+  "rememberMe": "on",
+  "captchaCode": "",
+  "encodeCaptha": ""
+}
+
+### 2. 获取验证码（当返回 1502 时调用）
+# @name get_captcha
+POST {{sso_url}}/sso/4.0/sso/image_captcha2
+
+
+# ==================== UAI 平台 ====================
+
+### 3. UAI - 获取课程列表
+# @name uai_course_list
+GET {{uai_url}}/learn/api/v2/course/list
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 4. UAI - 提交课程进度
+# @name uai_submit_progress
+POST {{uai_url}}/learn/api/v2/record/progress
+Content-Type: application/json
+X-Annotator-Auth-Token: {{jwt_token}}
+
+{
+  "courseId": "{{course_id}}",
+  "unitId": "unit_001",
+  "openId": "{{open_id}}",
+  "duration": 30
+}
+
+
+# ==================== UContent 平台 ====================
+
+### 5. UContent - 获取课程详情
+# @name ucontent_course_details
+GET {{base_url}}/course/api/v4/lms/course/details?courseId={{course_id}}
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 6. UContent - 获取课程内容（加密）
+# @name ucontent_content
+GET {{base_url}}/course/api/v3/content/{{course_id}}/64f1f5410001019/default
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 7. UContent - 获取答案与解析
+# @name ucontent_answer
+GET {{base_url}}/course/api/v3/answer/{{course_id}}/64f1f5410001019/default
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 8. UContent - 保存进度（text/video 类型）
+# @name ucontent_save_progress
+POST {{base_url}}/api/mobile/user_group/{{course_id}}/64f1f5410001019/progress
+Content-Type: application/json
+X-Annotator-Auth-Token: {{jwt_token}}
+
+{
+  "groupId": "64f1f5410001019",
+  "status": 2,
+  "version": "default"
+}
+
+### 9. UContent - 提交答案（task 类型）
+# @name ucontent_submit_task
+POST {{base_url}}/course/api/v3/newExploration/submit
+Content-Type: application/json
+X-Annotator-Auth-Token: {{jwt_token}}
+
+{
+  "quesDatas": [
+    {
+      "instanceId": "ques_001",
+      "answer": "{}",
+      "context": "{}",
+      "contextVersion": 0,
+      "answerVersion": 0
+    }
+  ],
+  "groupId": "657ebd3c0000d13",
+  "isCompleted": [true],
+  "thirdPartyJudges": "[]",
+  "submitType": 1,
+  "hideLoading": true,
+  "associationGroupId": "",
+  "associationUnitId": "",
+  "courseId": "{{course_id}}",
+  "openId": "{{open_id}}",
+  "version": "default"
+}
+
+### 10. UContent - 查询课程进度
+# @name ucontent_course_progress
+GET {{base_url}}/course/api/v2/course_progress/{{course_id}}/{{open_id}}/default
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 11. UContent - 查询单元进度
+# @name ucontent_unit_progress
+GET {{base_url}}/course/api/v2/course_progress/{{course_id}}/64f1e6350000caa/{{open_id}}/default
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 12. UContent - 查询 Group 状态
+# @name ucontent_group_state
+GET {{base_url}}/api/mobile/user_module/{{course_id}}/64f1f5410001019/progress/v2
+X-Annotator-Auth-Token: {{jwt_token}}
+
+### 13. UContent - 查询用户答案
+# @name ucontent_user_answer
+GET {{base_url}}/api/mobile/user_module/{{course_id}}/64f1f5410001019-default
+X-Annotator-Auth-Token: {{jwt_token}}

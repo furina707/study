@@ -1,0 +1,4 @@
+### UContent - 查询 Group 状态
+
+GET https://ucontent.unipus.cn/api/mobile/user_module/{{course_id}}/{{group_id}}/progress/v2
+X-Annotator-Auth-Token: {{jwt_token}}

@@ -1,0 +1,4 @@
+### UContent - 查询用户答案
+
+GET https://ucontent.unipus.cn/api/mobile/user_module/{{course_id}}/{{group_id}}-default
+X-Annotator-Auth-Token: {{jwt_token}}

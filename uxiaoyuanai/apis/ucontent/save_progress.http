@@ -1,0 +1,11 @@
+### UContent - 保存进度 (text/video 类型)
+
+POST https://ucontent.unipus.cn/api/mobile/user_group/{{course_id}}/{{group_id}}/progress
+Content-Type: application/json
+X-Annotator-Auth-Token: {{jwt_token}}
+
+{
+  "groupId": "{{group_id}}",
+  "status": 2,
+  "version": "default"
+}

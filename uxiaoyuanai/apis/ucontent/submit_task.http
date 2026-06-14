@@ -1,0 +1,27 @@
+### UContent - 提交答案 (task 类型)
+
+POST https://ucontent.unipus.cn/course/api/v3/newExploration/submit
+Content-Type: application/json
+X-Annotator-Auth-Token: {{jwt_token}}
+
+{
+  "quesDatas": [
+    {
+      "instanceId": "ques_0",
+      "answer": "{}",
+      "context": "{}",
+      "contextVersion": 0,
+      "answerVersion": 0
+    }
+  ],
+  "groupId": "{{group_id}}",
+  "isCompleted": [true],
+  "thirdPartyJudges": "[]",
+  "submitType": 1,
+  "hideLoading": true,
+  "associationGroupId": "",
+  "associationUnitId": "",
+  "courseId": "{{course_id}}",
+  "openId": "{{open_id}}",
+  "version": "default"
+}

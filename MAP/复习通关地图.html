@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>期末复习通关地图 · 六科核心考点全景可视化</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0a0c14;
+    --bg-card: #12151f;
+    --bg-card-hover: #1a1e2e;
+    --border: #2a2f42;
+    --text-primary: #e8e6e1;
+    --text-secondary: #9a97a0;
+    --text-dim: #5c5a63;
+    --accent-math: #f59e0b;
+    --accent-physics: #3b82f6;
+    --accent-modeling: #10b981;
+    --accent-java: #f97316;
+    --accent-web: #8b5cf6;
+    --accent-history: #ef4444;
+    --glow-math: rgba(245,158,11,0.12);
+    --glow-physics: rgba(59,130,246,0.12);
+    --glow-modeling: rgba(16,185,129,0.12);
+    --glow-java: rgba(249,115,22,0.12);
+    --glow-web: rgba(139,92,246,0.12);
+    --glow-history: rgba(239,68,68,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #2a2f42 var(--bg-deep); }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 30%, var(--glow-math), transparent),
+      radial-gradient(ellipse 500px 350px at 80% 20%, var(--glow-physics), transparent),
+      radial-gradient(ellipse 400px 300px at 50% 80%, var(--glow-web), transparent);
+    z-index: 0;
+    animation: heroGlow 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes heroGlow {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.05); }
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.35rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    background: rgba(18,21,31,0.6);
+  }
+
+  .hero h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #f59e0b, #ef4444, #8b5cf6, #3b82f6);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .hero-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    background: rgba(18,21,31,0.7);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .hero-nav a:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-math);
+    box-shadow: 0 8px 30px rgba(245,158,11,0.15);
+  }
+
+  .hero-nav .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    z-index: 1;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== SECTIONS ===== */
+  .course-section {
+    position: relative;
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-number {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ===== FLOW CHART ===== */
+  .flow-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .flow-node {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    padding: 1.2rem 1.8rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    text-align: center;
+    transition: all 0.4s ease;
+    cursor: default;
+  }
+
+  .flow-node:hover {
+    border-color: var(--accent-math);
+    background: var(--bg-card-hover);
+    box-shadow: 0 0 40px var(--glow-math);
+    transform: scale(1.02);
+  }
+
+  .flow-node .node-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .flow-node .node-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .flow-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+  }
+
+  .flow-arrow .arrow-line {
+    width: 2px;
+    height: 25px;
+  }
+
+  .flow-arrow .arrow-label {
+    padding: 0.25rem 0.8rem;
+    border: 1px dashed var(--border);
+    border-radius: 100px;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    background: var(--bg-deep);
+    margin: 0.3rem 0;
+  }
+
+  .flow-arrow .arrow-head {
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
+
+  .flow-branch {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 720px;
+    margin-top: 0.5rem;
+  }
+
+  .flow-branch .branch-item {
+    flex: 1;
+    max-width: 300px;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+  }
+
+  .flow-branch .branch-item strong {
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ===== FORMULA BOX ===== */
+  .formula-box {
+    max-width: 850px;
+    margin: 3rem auto 0;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .formula-box h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .formula-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid;
+  }
+
+  .formula-card .card-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .formula-card .formula-line {
+    font-family: 'Georgia', serif;
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.05);
+  }
+
+  .formula-card .formula-line:last-child { border-bottom: none; }
+
+  .formula-card .formula-tip {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.3);
+  }
+
+  /* ===== KNOWLEDGE POINTS ===== */
+  .kp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .kp-card {
+    padding: 1.8rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kp-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .kp-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .kp-card h4 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .kp-card ul {
+    list-style: none;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  .kp-card li {
+    padding: 0.4rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+    border-bottom: 1px dashed rgba(255,255,255,0.03);
+  }
+
+  .kp-card li:last-child { border-bottom: none; }
+
+  .kp-card li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    opacity: 0.5;
+  }
+
+  .kp-card .kp-highlight {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* ===== TABLE ===== */
+  .data-table {
+    max-width: 1100px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .data-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .data-table thead th {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  .data-table tbody td {
+    padding: 1rem 1.2rem;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(42,47,66,0.5);
+    vertical-align: top;
+  }
+
+  .data-table tbody tr {
+    transition: background 0.3s ease;
+  }
+
+  .data-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+
+  .data-table .topic-tag {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid;
+  }
+
+  .data-table .formula-block {
+    display: block;
+    padding: 0.5rem 0.8rem;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.3);
+    font-family: 'Georgia', serif;
+    font-size: 0.88rem;
+    white-space: pre-wrap;
+  }
+
+  /* ===== MODEL CARDS ===== */
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .model-card {
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .model-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .model-card:hover { transform: translateY(-4px); }
+  .model-card:hover::before { opacity: 1; }
+
+  .model-card .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+  .model-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .model-card .card-condition {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .model-card .card-models {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .model-tag {
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  /* ===== JAVA SECTION ===== */
+  .java-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .java-layout { grid-template-columns: 1fr; }
+    .kp-grid { grid-template-columns: 1fr; }
+    .flow-branch { flex-direction: column; }
+    .formula-grid { grid-template-columns: 1fr; }
+  }
+
+  .java-card {
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.3s ease;
+  }
+
+  .java-card:hover { box-shadow: 0 0 30px var(--glow-java); }
+
+  .java-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .java-rule {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid var(--accent-java);
+  }
+
+  .java-rule:last-child { margin-bottom: 0; }
+
+  .java-rule .rule-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .java-rule .rule-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .java-code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    background: rgba(0,0,0,0.4);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    display: block;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ===== TREE ===== */
+  .tree-container {
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    margin-top: 2rem;
+  }
+
+  .tree-container h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .tree-node {
+    padding: 0.6rem 1.4rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.3);
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .tree-node.root {
+    background: rgba(249,115,22,0.1);
+    border-color: rgba(249,115,22,0.3);
+    font-weight: 700;
+  }
+
+  .tree-node .node-detail {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 0.2rem;
+  }
+
+  .tree-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tree-connector .v-line {
+    width: 2px;
+    height: 20px;
+    background: var(--border);
+  }
+
+  .tree-branch {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+  }
+
+  .tree-branch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 25%;
+    right: 25%;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .tree-branch-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 200px;
+  }
+
+  .tree-branch-item .v-line {
+    width: 2px;
+    height: 20px;
+    background: var(--border);
+  }
+
+  /* ===== WEB FLOW ===== */
+  .web-flow {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .web-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .web-steps::before {
+    content: '';
+    position: absolute;
+    left: 1.1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-web), var(--accent-java), var(--accent-physics), var(--accent-modeling));
+  }
+
+  .web-step {
+    position: relative;
+    padding: 1.5rem 2rem;
+    margin-bottom: 0.5rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.3s ease;
+  }
+
+  .web-step:hover {
+    transform: translateX(4px);
+  }
+
+  .web-step::before {
+    content: attr(data-step);
+    position: absolute;
+    left: -3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--bg-deep);
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .web-step .step-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .web-step .step-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  .web-step .step-detail {
+    margin-top: 0.6rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.3);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  /* ===== HTTP CODES ===== */
+  .http-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .http-card {
+    padding: 1.2rem;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .http-card:hover { transform: translateY(-2px); }
+
+  .http-code {
+    font-size: 1.4rem;
+    font-weight: 900;
+    font-family: 'Georgia', serif;
+    margin-bottom: 0.3rem;
+  }
+
+  .http-meaning {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 1.1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-history), var(--accent-math), var(--accent-modeling));
+  }
+
+  .timeline-era {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-era:last-child { margin-bottom: 0; }
+
+  .timeline-era::before {
+    content: '';
+    position: absolute;
+    left: -2.9rem;
+    top: 0.3rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--accent-history);
+    border: 3px solid var(--bg-deep);
+    box-shadow: 0 0 15px rgba(239,68,68,0.4);
+  }
+
+  .timeline-era.milestone::before {
+    width: 1.4rem;
+    height: 1.4rem;
+    left: -3.1rem;
+    top: 0.1rem;
+  }
+
+  .era-year {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .era-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .era-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.8rem;
+  }
+
+  .era-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .era-event {
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+  }
+
+  .era-event:hover { border-color: rgba(239,68,68,0.3); }
+
+  .era-event .event-class {
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .era-event .event-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  .era-event .event-info {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+  }
+
+  .era-event .event-result {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid rgba(239,68,68,0.3);
+  }
+
+  /* ===== TIPS ===== */
+  .tips-section {
+    padding: 5rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .tip-card {
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.3s ease;
+  }
+
+  .tip-card:hover { transform: translateY(-4px); }
+
+  .tip-card .tip-category {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .tip-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    margin-bottom: 0.8rem;
+  }
+
+  .tip-card p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.82rem;
+  }
+
+  /* ===== BACK TO TOP ===== */
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 100;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+
+  .back-to-top.show { opacity: 1; transform: translateY(0); }
+  .back-to-top:hover { border-color: var(--accent-math); }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  .stagger-1 { transition-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
+  .stagger-5 { transition-delay: 0.5s; }
+  .stagger-6 { transition-delay: 0.6s; }
+
+  @media (max-width: 640px) {
+    .course-section { padding: 3rem 1rem; }
+    .data-table { overflow-x: auto; }
+    .web-steps { padding-left: 2.5rem; }
+    .timeline { padding-left: 2.5rem; }
+    .hero-nav a { font-size: 0.8rem; padding: 0.5rem 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">📚 期末复习通关地图</div>
+    <h1>六科核心考点<br>全景可视化</h1>
+    <p>高等数学 · 大学物理 · 数学建模 · Java核心技术 · Web前后端 · 中国近代史纲要</p>
+    <nav class="hero-nav">
+      <a href="#math"><span class="dot" style="background:var(--accent-math)"></span>高等数学</a>
+      <a href="#physics"><span class="dot" style="background:var(--accent-physics)"></span>大学物理</a>
+      <a href="#modeling"><span class="dot" style="background:var(--accent-modeling)"></span>数学建模</a>
+      <a href="#java"><span class="dot" style="background:var(--accent-java)"></span>Java</a>
+      <a href="#web"><span class="dot" style="background:var(--accent-web)"></span>Web开发</a>
+      <a href="#history"><span class="dot" style="background:var(--accent-history)"></span>近代史</a>
+    </nav>
+  </div>
+  <div class="scroll-hint">↓ 向下滚动探索</div>
+</section>
+
+<!-- ===== 一、高等数学 ===== -->
+<section class="course-section" id="math">
+  <div class="section-header fade-in">
+    <div class="section-number">CHAPTER 01</div>
+    <h2 class="section-title" style="color:var(--accent-math)">📐 高等数学</h2>
+    <p class="section-subtitle">微积分核心 — 极限→微分→积分→级数，知识体系一网打尽</p>
+  </div>
+
+  <!-- 核心流程图 -->
+  <div class="flow-chart">
+    <div class="flow-node fade-in stagger-1" style="border-color:rgba(245,158,11,0.3)">
+      <div class="node-title" style="color:var(--accent-math)">极限 (Limit)</div>
+      <div class="node-desc">微积分的基石 · 洛必达法则 · 等价无穷小替换</div>
+    </div>
+    <div class="flow-arrow fade-in stagger-1">
+      <div class="arrow-line" style="background:linear-gradient(to bottom,var(--accent-math),transparent)"></div>
+      <div class="arrow-label">基础工具</div>
+      <div class="arrow-head" style="border-top-color:var(--accent-math)"></div>
+    </div>
+    <div class="flow-node fade-in stagger-2">
+      <div class="node-title">一元微分</div>
+      <div class="node-desc">导数与微分 · 几何意义 · 中值定理</div>
+    </div>
+    <div class="flow-branch fade-in stagger-2">
+      <div class="branch-item"><strong>单调性</strong>导数正负判断</div>
+      <div class="branch-item"><strong>极值</strong>一阶二阶导联合</div>
+    </div>
+    <div class="flow-arrow fade-in stagger-3">
+      <div class="arrow-line" style="background:linear-gradient(to bottom,var(--accent-math),transparent)"></div>
+      <div class="arrow-label">牛顿-莱布尼茨公式</div>
+      <div class="arrow-head" style="border-top-color:var(--accent-math)"></div>
+    </div>
+    <div class="flow-node fade-in stagger-3">
+      <div class="node-title">一元积分</div>
+      <div class="node-desc">不定积分 / 定积分 / 广义积分</div>
+    </div>
+    <div class="flow-arrow fade-in stagger-4">
+      <div class="arrow-line" style="background:linear-gradient(to bottom,var(--accent-math),transparent)"></div>
+      <div class="arrow-label">向高维延伸</div>
+      <div class="arrow-head" style="border-top-color:var(--accent-math)"></div>
+    </div>
+    <div class="flow-node fade-in stagger-4">
+      <div class="node-title">多元微积分</div>
+      <div class="node-desc">偏导数 · 全微分 · 重积分 · 曲线曲面积分</div>
+    </div>
+    <div class="flow-arrow fade-in stagger-5">
+      <div class="arrow-line" style="background:linear-gradient(to bottom,var(--accent-math),transparent)"></div>
+      <div class="arrow-label">敛散性分析 · 级数展开</div>
+      <div class="arrow-head" style="border-top-color:var(--accent-math)"></div>
+    </div>
+    <div class="flow-node fade-in stagger-5">
+      <div class="node-title">无穷级数</div>
+      <div class="node-desc">幂级数 · 傅里叶级数 · 泰勒展开</div>
+    </div>
+  </div>
+
+  <!-- 公式卡片 -->
+  <div class="formula-box fade-in" style="background:linear-gradient(135deg,var(--glow-math),var(--bg-card))">
+    <h3 style="color:var(--accent-math)">🎯 核心公式速查表</h3>
+    <div class="formula-grid">
+      <!-- 泰勒展开 -->
+      <div class="formula-card" style="border-color:var(--accent-math)">
+        <div class="card-title" style="color:var(--accent-math)">📖 泰勒/麦克劳林展开</div>
+        <div class="formula-line">eˣ = 1 + x + x²/2! + x³/3! + ··· + xⁿ/n!</div>
+        <div class="formula-line">sin x = x - x³/3! + x⁵/5! - x⁷/7! + ···</div>
+        <div class="formula-line">cos x = 1 - x²/2! + x⁴/4! - x⁶/6! + ···</div>
+        <div class="formula-line">ln(1+x) = x - x²/2 + x³/3 - x⁴/4 + ···</div>
+        <div class="formula-line">1/(1-x) = 1 + x + x² + x³ + ··· (|x|<1)</div>
+        <div class="formula-tip">💡 记忆：eˣ全正、sin奇次、cos偶次、ln交替</div>
+      </div>
+      <!-- 分部积分 -->
+      <div class="formula-card" style="border-color:var(--accent-math)">
+        <div class="card-title" style="color:var(--accent-math)">📐 分部积分 & 换元</div>
+        <div class="formula-line">∫u dv = uv - ∫v du</div>
+        <div class="formula-line">口诀："反对幂三指" 排前留u（求导简化）</div>
+        <div class="formula-line">∫ f'(x)dx = f(x) + C （基本积分）</div>
+        <div class="formula-line">d/dx [∫ₐˣ f(t)dt] = f(x) （变上限求导）</div>
+        <div class="formula-tip">💡 换元：三角代换 / 倒代换 / 指数代换</div>
+      </div>
+      <!-- 微分方程 -->
+      <div class="formula-card" style="border-color:var(--accent-math)">
+        <div class="card-title" style="color:var(--accent-math)">📊 微分方程通解</div>
+        <div class="formula-line">可分离：dy/y = k dx → y = Ceᵏˣ</div>
+        <div class="formula-line">一阶线性：y' + P(x)y = Q(x)</div>
+        <div class="formula-line">通解：y = e^{-∫Pdx}(∫Q·e^{∫Pdx}dx + C)</div>
+        <div class="formula-line">二阶常系数：r² + pr + q = 0</div>
+        <div class="formula-tip">💡 r₁≠r₂ → y=C₁e^{r₁x}+C₂e^{r₂x}</div>
+      </div>
+      <!-- 多元微分 -->
+      <div class="formula-card" style="border-color:var(--accent-math)">
+        <div class="card-title" style="color:var(--accent-math)">📏 多元微分与极值</div>
+        <div class="formula-line">全微分：dz = ∂f/∂x dx + ∂f/∂y dy</div>
+        <div class="formula-line">链式法则：∂z/∂x = ∂f/∂u·∂u/∂x + ∂f/∂v·∂v/∂x</div>
+        <div class="formula-line">条件极值：拉格朗日乘数法</div>
+        <div class="formula-line">L = f(x,y) + λg(x,y)</div>
+        <div class="formula-tip">💡 联立∂L/∂x=∂L/∂y=∂L/∂λ=0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 知识点卡片 -->
+  <div class="kp-grid">
+    <div class="kp-card fade-in" style="border-color:rgba(245,158,11,0.2)">
+      <h4 style="color:var(--accent-math)">🔺 一元函数微分学</h4>
+      <ul>
+        <li><span class="kp-highlight">导数定义</span>：f'(x₀)=lim[f(x₀+Δx)-f(x₀)]/Δx</li>
+        <li><span class="kp-highlight">可导↔可微</span>：Δy = AΔx + o(Δx)</li>
+        <li><span class="kp-highlight">罗尔定理</span>：f(a)=f(b) → ∃ξ∈(a,b), f'(ξ)=0</li>
+        <li><span class="kp-highlight">拉格朗日</span>：f(b)-f(a)=f'(ξ)(b-a)</li>
+        <li><span class="kp-highlight">泰勒公式</span>：f(x)=Σf⁽ⁿ⁾(x₀)/n!·(x-x₀)ⁿ + Rₙ</li>
+      </ul>
+    </div>
+    <div class="kp-card fade-in stagger-1" style="border-color:rgba(245,158,11,0.2)">
+      <h4 style="color:var(--accent-math)">🔄 一元函数积分学</h4>
+      <ul>
+        <li><span class="kp-highlight">牛顿-莱布尼茨</span>：∫ₐᵇf(x)dx = F(b)-F(a)</li>
+        <li><span class="kp-highlight">奇偶对称</span>：偶函数面积加倍，积分限对称</li>
+        <li><span class="kp-highlight">周期函数</span>：∫₀ᴛf(x)dx 与起点无关</li>
+        <li><span class="kp-highlight">旋转体体积</span>：V=π∫ₐᵇf²(x)dx</li>
+        <li><span class="kp-highlight">弧长公式</span>：s=∫√(1+f'²)dx</li>
+      </ul>
+    </div>
+    <div class="kp-card fade-in stagger-2" style="border-color:rgba(245,158,11,0.2)">
+      <h4 style="color:var(--accent-math)">🔷 多元函数积分学</h4>
+      <ul>
+        <li><span class="kp-highlight">二重积分</span>：∬f(x,y)dσ = ∫dx∫f(x,y)dy</li>
+        <li><span class="kp-highlight">交换积分序</span>：先y后x ↔ 先x后y</li>
+        <li><span class="kp-highlight">极坐标变换</span>：dσ = r dr dθ</li>
+        <li><span class="kp-highlight">格林公式</span>：∮Pdx+Qdy = ∬(∂Q/∂x-∂P/∂y)dσ</li>
+        <li><span class="kp-highlight">高斯公式</span>：∭(∂P/∂x+∂Q/∂y+∂R/∂z)dV</li>
+      </ul>
+    </div>
+    <div class="kp-card fade-in stagger-3" style="border-color:rgba(245,158,11,0.2)">
+      <h4 style="color:var(--accent-math)">📈 无穷级数</h4>
+      <ul>
+        <li><span class="kp-highlight">正项级数</span>：比较法 / 比值法 / 根值法</li>
+        <li><span class="kp-highlight">交错级数</span>：莱布尼茨判别法（单调↓→0）</li>
+        <li><span class="kp-highlight">条件收敛</span>：∑|aₙ|发散，但∑aₙ收敛</li>
+        <li><span class="kp-highlight">幂级数</span>：收敛半径 R = lim|aₙ/aₙ₊₁|</li>
+        <li><span class="kp-highlight">傅里叶级数</span>：周期函数展开为三角级数</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 二、大学物理 ===== -->
+<section class="course-section" id="physics">
+  <div class="section-header fade-in">
+    <div class="section-number">CHAPTER 02</div>
+    <h2 class="section-title" style="color:var(--accent-physics)">🧲 大学物理</h2>
+    <p class="section-subtitle">力、电、磁、光、热 — 核心公式与典型模型全覆盖</p>
+  </div>
+
+  <!-- 公式表格 -->
+  <div class="data-table fade-in" style="border-color:rgba(59,130,246,0.2)">
+    <table>
+      <thead>
+        <tr style="background:rgba(59,130,246,0.08)">
+          <th style="width:16%;color:var(--accent-physics)">核心板块</th>
+          <th style="width:26%;color:var(--accent-physics)">核心物理量</th>
+          <th style="color:var(--accent-physics)">必考定理 / 核心公式</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="topic-tag" style="color:var(--accent-physics);border-color:rgba(59,130,246,0.3)">力学与刚体</span></td>
+          <td>动量 P · 角动量 L · 转动惯量 I</td>
+          <td>
+            动量守恒 & 机械能守恒
+            <div class="formula-block">刚体转动定律：M = Iα
+转动动能：Eₖ = ½Iω²
+角动量：L = Iω
+平行轴定理：I = I₀ + md²</div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="topic-tag" style="color:var(--accent-physics);border-color:rgba(59,130,246,0.3)">静电场</span></td>
+          <td>电场强度 E · 电势 V · 电通量 Φₑ</td>
+          <td>
+            高斯定理（求对称分布场强）
+            <div class="formula-block">∮E·dS = Σq/ε₀
+点电荷场强：E = kQ/r²
+电势：V = kQ/r
+电势能：W = qV</div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="topic-tag" style="color:var(--accent-physics);border-color:rgba(59,130,246,0.3)">稳恒磁场</span></td>
+          <td>磁感应强度 B · 磁通量 Φₘ</td>
+          <td>
+            毕奥-萨伐尔定律 · 安培环路定理
+            <div class="formula-block">∮B·dl = μ₀ΣI（包围电流和）
+安培力：F = BIL sinθ
+洛伦兹力：F = qvB sinθ
+运动电荷在磁场中做螺旋运动</div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="topic-tag" style="color:var(--accent-physics);border-color:rgba(59,130,246,0.3)">电磁感应</span></td>
+          <td>感应电动势 ε · 磁通量 Φₘ</td>
+          <td>
+            法拉第电磁感应定律
+            <div class="formula-block">ε = -dΦ/dt（感生电动势）
+动生电动势：ε = BLv sinθ
+自感电动势：ε_L = -L·dI/dt
+互感系数：M = k√(L₁L₂)</div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="topic-tag" style="color:var(--accent-physics);border-color:rgba(59,130,246,0.3)">波动与光学</span></td>
+          <td>光程差 δ · 干涉 · 衍射</td>
+          <td>
+            杨氏双缝 / 薄膜干涉 / 单缝衍射
+            <div class="formula-block">明纹：Δ = kλ；暗纹：Δ = (2k+1)λ/2
+光程差：Δ = n·r₂ - r₁
+注意半波损失：折射时损失λ/2</div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="topic-tag" style="color:var(--accent-physics);border-color:rgba(59,130,246,0.3)">热学</span></td>
+          <td>内能 U · 熵 S · 温度 T</td>
+          <td>
+            热力学第一定律 · 理想气体状态方程
+            <div class="formula-block">ΔU = Q + W（热力学能）
+理想气体：PV = nRT
+等压：W = PΔV；等温：W = nRTln(V₂/V₁)
+卡诺效率：η = 1 - T₂/T₁</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 物理知识点卡片 -->
+  <div class="kp-grid" style="margin-top:2rem">
+    <div class="kp-card fade-in" style="border-color:rgba(59,130,246,0.2)">
+      <h4 style="color:var(--accent-physics)">⚡ 电磁学解题技巧</h4>
+      <ul>
+        <li><span class="kp-highlight">对称性分析</span>：球对称→高斯面为球面，轴对称→安培环路为圆</li>
+        <li><span class="kp-highlight">电场叠加</span>：多个点电荷E矢量叠加，V标量叠加</li>
+        <li><span class="kp-highlight">电容器储能</span>：W = ½QU = ½CU² = Q²/2C</li>
+        <li><span class="kp-highlight">LC振荡</span>：ω = 1/√LC，周期 T = 2π√LC</li>
+      </ul>
+    </div>
+    <div class="kp-card fade-in stagger-1" style="border-color:rgba(59,130,246,0.2)">
+      <h4 style="color:var(--accent-physics)">🔊 波动光学要点</h4>
+      <ul>
+        <li><span class="kp-highlight">光程差</span>：光在不同介质中走过的"光距离"</li>
+        <li><span class="kp-highlight">薄膜干涉</span>：等厚条纹（劈尖/牛顿环）</li>
+        <li><span class="kp-highlight">单缝衍射</span>：中央明纹宽度=2λD/a</li>
+        <li><span class="kp-highlight">光栅方程</span>：(a+b)sinθ = kλ（主极大）</li>
+      </ul>
+    </div>
+    <div class="kp-card fade-in stagger-2" style="border-color:rgba(59,130,246,0.2)">
+      <h4 style="color:var(--accent-physics)">🌡️ 热学核心概念</h4>
+      <ul>
+        <li><span class="kp-highlight">麦克斯韦速率分布</span>：分子速率呈正态分布</li>
+        <li><span class="kp-highlight">分子动理论</span>：P = nkT，Ek = 3/2 kT</li>
+        <li><span class="kp-highlight">熵增原理</span>：孤立系统ΔS ≥ 0</li>
+        <li><span class="kp-highlight">卡诺循环</span>：两个等温+两个绝热过程</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 三、数学建模 ===== -->
+<section class="course-section" id="modeling">
+  <div class="section-header fade-in">
+    <div class="section-number">CHAPTER 03</div>
+    <h2 class="section-title" style="color:var(--accent-modeling)">📊 数学建模</h2>
+    <p class="section-subtitle">三大任务选型指南 — 准确识别题目类型，精准套用模型</p>
+  </div>
+
+  <div class="model-grid">
+    <div class="model-card fade-in" style="border-color:rgba(16,185,129,0.2)">
+      <div class="card-icon">🏷️</div>
+      <h3 style="color:var(--accent-modeling)">分类 / 评价类任务</h3>
+      <div class="card-condition" style="background:rgba(16,185,129,0.08)">题目要求：对方案打分、排序或分类</div>
+      <ul style="font-size:0.88rem;color:var(--text-secondary);margin-top:1rem;padding-left:1.2rem">
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">层次分析法 AHP</strong>：主观权重，需构造判断矩阵，求特征值</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">TOPSIS 法</strong>：到理想解/负理想解距离，贴近度排序</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">熵权法</strong>：客观赋权，信息熵越小权重越大</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">模糊综合评价</strong>：模糊矩阵合成，适合边界不清的分类</li>
+        <li><strong style="color:var(--text-primary)">灰色关联分析</strong>：计算序列间关联度</li>
+      </ul>
+    </div>
+    <div class="model-card fade-in stagger-1" style="border-color:rgba(16,185,129,0.2)">
+      <div class="card-icon">📈</div>
+      <h3 style="color:var(--accent-modeling)">预测类任务</h3>
+      <div class="card-condition" style="background:rgba(16,185,129,0.08)">题目要求：根据历史数据预测未来走向</div>
+      <ul style="font-size:0.88rem;color:var(--text-secondary);margin-top:1rem;padding-left:1.2rem">
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">灰色预测 GM(1,1)</strong>：小样本(~10个)，短期预测，精度检验用残差检验</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">多元线性回归</strong>：大样本，多因素，检验 R²/F/t</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">时间序列 ARIMA</strong>：季节性数据，差分使非平稳序列平稳</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">BP 神经网络</strong>：非线性映射，适合复杂规律</li>
+        <li><strong style="color:var(--text-primary)">插值与拟合</strong>：插值过所有点，拟合最优近似</li>
+      </ul>
+    </div>
+    <div class="model-card fade-in stagger-2" style="border-color:rgba(16,185,129,0.2)">
+      <div class="card-icon">⚙️</div>
+      <h3 style="color:var(--accent-modeling)">优化 / 决策类任务</h3>
+      <div class="card-condition" style="background:rgba(16,185,129,0.08)">题目要求：在限制条件下求最大值或最小值</div>
+      <ul style="font-size:0.88rem;color:var(--text-secondary);margin-top:1rem;padding-left:1.2rem">
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">线性规划 LP</strong>：目标函数和约束均为线性，用单纯形法</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">整数规划 ILP</strong>：变量取整（0-1规划/指派问题）</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">非线性规划</strong>：罚函数法/梯度下降法求解</li>
+        <li style="margin-bottom:0.5rem"><strong style="color:var(--text-primary)">多目标优化</strong>：理想点法/加权求和法/帕累托最优</li>
+        <li><strong style="color:var(--text-primary)">图论</strong>：最短路/最小生成树/网络流/TSP</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 模型对比表 -->
+  <div class="formula-box fade-in" style="margin-top:3rem;background:linear-gradient(135deg,var(--glow-modeling),var(--bg-card))">
+    <h3 style="color:var(--accent-modeling)">🔍 模型选择速查</h3>
+    <div class="data-table" style="margin-top:1rem;border:none">
+      <table>
+        <thead>
+          <tr style="background:rgba(16,185,129,0.08)">
+            <th style="width:25%;color:var(--accent-modeling)">特征</th>
+            <th style="width:37%;color:var(--accent-modeling)">推荐模型</th>
+            <th style="color:var(--accent-modeling)">关键参数 / 注意事项</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>样本量 < 20</td>
+            <td>灰色预测 GM(1,1)</td>
+            <td>级比检验，后验差比 C < 0.35</td>
+          </tr>
+          <tr>
+            <td>样本量 > 100，多因素</td>
+            <td>多元回归 / 机器学习</td>
+            <td>R² > 0.7，F 检验显著，共线性 VIF < 10</td>
+          </tr>
+          <tr>
+            <td>强周期性数据</td>
+            <td>时间序列 SARIMA</td>
+            <td>差分阶数 d，季节周期 s</td>
+          </tr>
+          <tr>
+            <td>变量为 0/1 决策</td>
+            <td>整数规划 / 遗传算法</td>
+            <td>用 Lingo 或 MATLAB 求解</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 四、Java ===== -->
+<section class="course-section" id="java">
+  <div class="section-header fade-in">
+    <div class="section-number">CHAPTER 04</div>
+    <h2 class="section-title" style="color:var(--accent-java)">☕ Java 核心技术</h2>
+    <p class="section-subtitle">OOP · 集合框架 · 异常 · IO · 多线程 — 核心知识点全梳理</p>
+  </div>
+
+  <div class="java-layout">
+    <div class="java-card fade-in" style="border-color:rgba(249,115,22,0.2)">
+      <h3>🧠 多态执行逻辑</h3>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">编译看左边 / 运行看右边</div>
+        <div class="rule-desc">父类引用指向子类对象时，只能调用父类声明的方法，实际执行子类重写后的方法</div>
+        <span class="java-code">Animal a = new Dog();
+a.eat();     // ✅ 编译看Animal，运行看Dog
+a.bark();    // ❌ 编译报错！Animal没有bark()</span>
+      </div>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">instanceof — 安全向下转型</div>
+        <div class="rule-desc">先判断再强转，避免 ClassCastException</div>
+        <span class="java-code">if (a instanceof Dog) {
+    Dog d = (Dog) a;  // 安全强转
+    d.bark();
+}</span>
+      </div>
+    </div>
+
+    <div class="java-card fade-in stagger-1" style="border-color:rgba(249,115,22,0.2)">
+      <h3>📦 集合框架核心对比</h3>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">List vs Set vs Map</div>
+        <div class="rule-desc">
+          <strong>List</strong>：有序可重复，有索引 → ArrayList(查快) / LinkedList(增删快)
+          <br><strong>Set</strong>：无序唯一 → HashSet(哈希去重) / TreeSet(自动排序)
+          <br><strong>Map</strong>：键值对，键唯一 → HashMap / TreeMap / LinkedHashMap
+        </div>
+      </div>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">fail-fast 机制</div>
+        <div class="rule-desc">ArrayList/HashMap 在迭代时若检测到结构变化，抛出 ConcurrentModificationException</div>
+      </div>
+    </div>
+
+    <div class="java-card fade-in stagger-2" style="border-color:rgba(249,115,22,0.2)">
+      <h3>⚠️ 异常处理机制</h3>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">Checked vs Unchecked</div>
+        <div class="rule-desc">
+          <strong>Checked</strong>（编译时异常）：IOException, SQLException → 必须 try-catch 或 throws
+          <br><strong>Unchecked</strong>（运行时异常）：NullPointer, ArrayIndex, ClassCast → 可处理可不处理
+        </div>
+      </div>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">异常执行顺序</div>
+        <span class="java-code">try { 可能异常 } 
+catch { 处理异常 }
+finally { 必定执行（关闭资源） }</span>
+      </div>
+    </div>
+
+    <div class="java-card fade-in stagger-3" style="border-color:rgba(249,115,22,0.2)">
+      <h3>🔌 IO 流体系</h3>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">字节流 vs 字符流</div>
+        <div class="rule-desc">
+          <strong>字节流</strong>：InputStream/OutputStream → 二进制文件(图片/音频)
+          <br><strong>字符流</strong>：Reader/Writer → 文本文件(UTF-8)
+        </div>
+      </div>
+      <div class="java-rule">
+        <div class="rule-title" style="color:var(--accent-java)">缓冲流 / 转换流</div>
+        <div class="rule-desc">BufferedReader/BufferedWriter → 高效读写；InputStreamReader → 字节→字符转换</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 集合框架树 -->
+  <div class="tree-container fade-in" style="border-color:rgba(249,115,22,0.2)">
+    <h3 style="color:var(--accent-java)">📊 集合框架继承树</h3>
+    <div class="tree">
+      <div class="tree-node root" style="color:var(--accent-java)">Iterable → Collection → {List, Set}</div>
+      <div class="tree-connector"><div class="v-line"></div></div>
+      <div class="tree-branch">
+        <div class="tree-branch-item">
+          <div class="v-line"></div>
+          <div class="tree-node" style="border-color:rgba(249,115,22,0.3)">
+            <strong style="color:var(--accent-java)">List</strong>
+            <div class="node-detail">有序·可重复·有索引</div>
+          </div>
+          <div class="tree-connector"><div class="v-line"></div></div>
+          <div class="tree-branch">
+            <div class="tree-branch-item"><div class="v-line"></div><div class="tree-node leaf">ArrayList<div class="node-detail">Object[]数组<br>查O(1)·增删O(n)</div></div></div>
+            <div class="tree-branch-item"><div class="v-line"></div><div class="tree-node leaf">LinkedList<div class="node-detail">双向链表<br>增删O(1)·查O(n)</div></div></div>
+            <div class="tree-branch-item"><div class="v-line"></div><div class="tree-node leaf">Vector<div class="node-detail">同步·线程安全<br>已过时</div></div></div>
+          </div>
+        </div>
+        <div class="tree-branch-item">
+          <div class="v-line"></div>
+          <div class="tree-node" style="border-color:rgba(249,115,22,0.3)">
+            <strong style="color:var(--accent-java)">Set</strong>
+            <div class="node-detail">无序·唯一·无索引</div>
+          </div>
+          <div class="tree-connector"><div class="v-line"></div></div>
+          <div class="tree-branch">
+            <div class="tree-branch-item"><div class="v-line"></div><div class="tree-node leaf">HashSet<div class="node-detail">哈希表<br>去重·不保证顺序</div></div></div>
+            <div class="tree-branch-item"><div class="v-line"></div><div class="tree-node leaf">TreeSet<div class="node-detail">红黑树<br>自然排序/比较器</div></div></div>
+            <div class="tree-branch-item"><div class="v-line"></div><div class="tree-node leaf">LinkedHashSet<div class="node-detail">保持插入顺序</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 多线程 -->
+  <div class="java-card fade-in" style="margin-top:2rem;border-color:rgba(249,115,22,0.2);max-width:100%">
+    <h3>🧵 多线程核心知识</h3>
+    <div class="kp-grid" style="margin-top:0">
+      <div>
+        <div class="java-rule">
+          <div class="rule-title" style="color:var(--accent-java)">线程创建方式</div>
+          <div class="rule-desc">
+            ① 继承 Thread 类 → 重写 run()
+            <br>② 实现 Runnable 接口 → 实现 run()（更常用）
+            <br>③ 实现 Callable<T> → 带返回值，配合 FutureTask
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="java-rule">
+          <div class="rule-title" style="color:var(--accent-java)">线程同步机制</div>
+          <div class="rule-desc">
+            <strong>synchronized</strong>：修饰方法/代码块，锁对象
+            <br><strong>volatile</strong>：保证可见性，不保证原子性
+            <br><strong>Lock</strong>：ReentrantLock 可重入锁，tryLock()
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="java-rule">
+          <div class="rule-title" style="color:var(--accent-java)">线程生命周期</div>
+          <div class="rule-desc">
+            <strong>New → Runnable → Running → Blocked/Terminated</strong>
+            <br>Blocked：等待锁 / sleep() / wait() / join()
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 五、Web ===== -->
+<section class="course-section" id="web">
+  <div class="section-header fade-in">
+    <div class="section-number">CHAPTER 05</div>
+    <h2 class="section-title" style="color:var(--accent-web)">🌐 Web 前后端开发</h2>
+    <p class="section-subtitle">HTTP协议 · MVC架构 · 数据库SQL · RESTful — 完整知识体系</p>
+  </div>
+
+  <!-- MVC流程 -->
+  <div class="web-flow fade-in" style="border-color:rgba(139,92,246,0.2)">
+    <div class="web-steps">
+      <div class="web-step" data-step="1" style="border-color:rgba(139,92,246,0.2)">
+        <div class="step-title" style="color:var(--accent-web)">① Client（浏览器）</div>
+        <div class="step-desc">用户交互触发 HTTP 请求，携带 URL / Headers / Body</div>
+        <div class="step-detail">GET / POST / PUT / DELETE / PATCH · Cookie / Session · JSON / FormData</div>
+      </div>
+      <div class="web-step" data-step="2" style="border-color:rgba(249,115,22,0.2)">
+        <div class="step-title" style="color:var(--accent-java)">② Controller（控制器层）</div>
+        <div class="step-desc">接收请求，参数绑定，调用 Service</div>
+        <div class="step-detail">@GetMapping / @PostMapping · @RequestParam / @RequestBody · @PathVariable</div>
+      </div>
+      <div class="web-step" data-step="3" style="border-color:rgba(59,130,246,0.2)">
+        <div class="step-title" style="color:var(--accent-physics)">③ Service（业务逻辑层）</div>
+        <div class="step-desc">处理核心业务逻辑，调用 DAO</div>
+        <div class="step-detail">事务管理 @Transactional · 业务校验 · 异常抛出</div>
+      </div>
+      <div class="web-step" data-step="4" style="border-color:rgba(16,185,129,0.2)">
+        <div class="step-title" style="color:var(--accent-modeling)">④ DAO（数据访问层）</div>
+        <div class="step-desc">执行 SQL，与数据库交互</div>
+        <div class="step-detail">MyBatis @Select / @Insert / @Update / @Delete · JPA Repository</div>
+      </div>
+      <div class="web-step" data-step="5" style="border-color:rgba(139,92,246,0.2)">
+        <div class="step-title" style="color:var(--accent-web)">⑤ View / JSON（响应层）</div>
+        <div class="step-desc">封装响应数据，返回给前端</div>
+        <div class="step-detail">@RestController 返回 JSON · @ResponseStatus · 统一响应结构 {code, msg, data}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTTP状态码 -->
+  <div class="formula-box fade-in" style="margin-top:2rem;background:linear-gradient(135deg,var(--glow-web),var(--bg-card))">
+    <h3 style="color:var(--accent-web)">🔢 HTTP 状态码速查</h3>
+    <div class="http-grid">
+      <div class="http-card" style="border-color:rgba(59,130,246,0.3)">
+        <div class="http-code" style="color:#3b82f6">1xx</div>
+        <div class="http-meaning">信息响应<br>100 Continue</div>
+      </div>
+      <div class="http-card" style="border-color:rgba(16,185,129,0.3)">
+        <div class="http-code" style="color:#10b981">2xx</div>
+        <div class="http-meaning">成功<br>200 OK / 201 Created</div>
+      </div>
+      <div class="http-card" style="border-color:rgba(245,158,11,0.3)">
+        <div class="http-code" style="color:#f59e0b">3xx</div>
+        <div class="http-meaning">重定向<br>301 / 302 / 304</div>
+      </div>
+      <div class="http-card" style="border-color:rgba(239,68,68,0.3)">
+        <div class="http-code" style="color:#ef4444">4xx</div>
+        <div class="http-meaning">客户端错误<br>400 / 401 / 403 / 404</div>
+      </div>
+      <div class="http-card" style="border-color:rgba(239,68,68,0.3)">
+        <div class="http-code" style="color:#ef4444">5xx</div>
+        <div class="http-meaning">服务器错误<br>500 / 502 / 503</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SQL -->
+  <div class="formula-box fade-in" style="margin-top:2rem;border-color:rgba(139,92,246,0.2)">
+    <h3 style="color:var(--accent-web)">🗄️ 数据库 SQL 核心语句</h3>
+    <div class="formula-grid">
+      <div class="formula-card" style="border-color:var(--accent-web)">
+        <div class="card-title" style="color:var(--accent-web)">📋 DDL — 数据定义</div>
+        <div class="formula-line">CREATE TABLE t (id INT PRIMARY KEY, name VARCHAR(50));</div>
+        <div class="formula-line">ALTER TABLE t ADD age INT;</div>
+        <div class="formula-line">DROP TABLE IF EXISTS t;</div>
+        <div class="formula-line">CREATE INDEX idx_name ON t(name);</div>
+        <div class="formula-tip">💡 DDL：自动提交，无法回滚</div>
+      </div>
+      <div class="formula-card" style="border-color:var(--accent-web)">
+        <div class="card-title" style="color:var(--accent-web)">📝 DML — 数据操作</div>
+        <div class="formula-line">INSERT INTO t VALUES(1,'Alice');</div>
+        <div class="formula-line">UPDATE t SET name='Bob' WHERE id=1;</div>
+        <div class="formula-line">DELETE FROM t WHERE id=1;</div>
+        <div class="formula-line">SELECT * FROM t WHERE age > 18 ORDER BY age DESC;</div>
+        <div class="formula-tip">💡 DELETE 可回滚，TRUNCATE 不可回滚</div>
+      </div>
+      <div class="formula-card" style="border-color:var(--accent-web)">
+        <div class="card-title" style="color:var(--accent-web)">🔗 连接查询</div>
+        <div class="formula-line">INNER JOIN：两表匹配行</div>
+        <div class="formula-line">LEFT JOIN：左表全部+右表匹配</div>
+        <div class="formula-line">RIGHT JOIN：右表全部+左表匹配</div>
+        <div class="formula-line">子查询：SELECT * FROM t WHERE age > (SELECT AVG(age) FROM t);</div>
+        <div class="formula-tip">💡 GROUP BY + HAVING 做分组聚合筛选</div>
+      </div>
+      <div class="formula-card" style="border-color:var(--accent-web)">
+        <div class="card-title" style="color:var(--accent-web)">⚡ 事务与锁</div>
+        <div class="formula-line">BEGIN / COMMIT / ROLLBACK</div>
+        <div class="formula-line">ACID：原子性·一致性·隔离性·持久性</div>
+        <div class="formula-line">隔离级别：Read Uncommitted / Committed / Repeatable / Serializable</div>
+        <div class="formula-line">锁：行锁 / 表锁 / 乐观锁 / 悲观锁</div>
+        <div class="formula-tip">💡 幻读 vs 不可重复读：快照读 vs 当前读</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 六、近代史 ===== -->
+<section class="course-section" id="history">
+  <div class="section-header fade-in">
+    <div class="section-number">CHAPTER 06</div>
+    <h2 class="section-title" style="color:var(--accent-history)">📜 中国近代史纲要</h2>
+    <p class="section-subtitle">救亡图存时间轴 — 各阶级探索历程与历史意义</p>
+  </div>
+
+  <div class="timeline fade-in">
+    <!-- 1840 -->
+    <div class="timeline-era milestone">
+      <div class="era-year" style="color:var(--accent-history)">1840</div>
+      <div class="era-title">鸦片战争 — 近代史起点</div>
+      <div class="era-desc">中国开始沦为半殖民地半封建社会，《南京条约》割让香港岛、赔款2100万银元</div>
+    </div>
+
+    <!-- 农民阶级 -->
+    <div class="timeline-era">
+      <div class="era-year">1851–1864</div>
+      <div class="era-title">农民阶级的探索</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-class" style="color:var(--accent-history)">🌾 农民阶级</div>
+          <div class="event-name">太平天国运动</div>
+          <div class="event-info">洪秀全、杨秀清领导 · 颁布《天朝田亩制度》（废除土地私有）</div>
+          <div class="event-info">《资政新篇》提出学习西方、发展资本主义</div>
+          <div class="event-result">❌ 失败原因：农民阶级局限性，无法提出科学革命纲领</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 地主阶级 -->
+    <div class="timeline-era">
+      <div class="era-year">1860s–1890s</div>
+      <div class="era-title">地主阶级的探索</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-class" style="color:var(--accent-history)">🏛️ 地主阶级</div>
+          <div class="event-name">洋务运动（自强·求富）</div>
+          <div class="event-info">代表：曾国藩、李鸿章、左宗棠、张之洞</div>
+          <div class="event-info">创办军事工业（江南制造总局）、民用工业、派遣留学生</div>
+          <div class="event-result">❌ 失败标志：1895甲午战争北洋水师全军覆没<br>→ 证明"中学为体、西学为用"无法救国</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 维新派 -->
+    <div class="timeline-era">
+      <div class="era-year">1898</div>
+      <div class="era-title">资产阶级维新派的探索</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-class" style="color:var(--accent-history)">✊ 资产阶级维新派</div>
+          <div class="event-name">戊戌变法（百日维新）</div>
+          <div class="event-info">康有为、梁启超、谭嗣同 · 光绪帝支持</div>
+          <div class="event-info">颁布《应诏统筹全局折》，提出政治、经济、文化改革</div>
+          <div class="event-result">❌ 失败原因：改良道路在半殖半封中国行不通<br>→ 慈禧太后发动戊戌政变，谭嗣同就义</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 革命派 -->
+    <div class="timeline-era">
+      <div class="era-year">1911</div>
+      <div class="era-title">资产阶级革命派的探索</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-class" style="color:var(--accent-history)">🔥 资产阶级革命派</div>
+          <div class="event-name">辛亥革命</div>
+          <div class="event-info">孙中山 · 1894年成立兴中会 · 1905年同盟会（机关报《民报》）</div>
+          <div class="event-info">纲领：三民主义（民族·民权·民生）</div>
+          <div class="event-result">⚠️ 历史意义：推翻封建帝制，结束2000多年君主专制<br>❌ 局限性：未改变半殖半封社会性质，果实被袁世凯窃取</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 五四 -->
+    <div class="timeline-era milestone">
+      <div class="era-year" style="color:var(--accent-history)">1919.5.4</div>
+      <div class="era-title">五四运动 — 新民主主义革命开端</div>
+      <div class="era-desc">导火索：巴黎和会拒绝中国合理要求<br>意义：工人阶级登上历史舞台，马克思主义广泛传播</div>
+    </div>
+
+    <!-- 中共 -->
+    <div class="timeline-era milestone">
+      <div class="era-year" style="color:var(--accent-history)">1921.7</div>
+      <div class="era-title">中共一大 — 中国共产党成立</div>
+      <div class="era-desc">上海召开 · 毛泽东、董必武等13人 · 确定党的名称、纲领<br>意义：中国革命面貌焕然一新</div>
+    </div>
+
+    <!-- 国共合作 -->
+    <div class="timeline-era">
+      <div class="era-year">1924–1927</div>
+      <div class="era-title">第一次国共合作</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-name">国民革命 / 大革命时期</div>
+          <div class="event-info">1924年孙中山改组国民党，实现第一次国共合作</div>
+          <div class="event-info">1926年北伐战争，目标是推翻北洋军阀统治</div>
+          <div class="event-result">⚠️ 1927年蒋介石"四一二"、汪精卫"七一五"反革命政变 → 合作破裂</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 土地革命 -->
+    <div class="timeline-era">
+      <div class="era-year">1927–1937</div>
+      <div class="era-title">土地革命战争时期</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-name">开辟农村包围城市的革命道路</div>
+          <div class="event-info">1927年"八七会议"：确立土地革命和武装反抗方针</div>
+          <div class="event-info">1931年中华苏维埃共和国成立</div>
+          <div class="event-info">📍 <strong style="color:var(--accent-history)">1935年遵义会议</strong>：生死攸关转折点</div>
+          <div class="event-result">确立毛泽东在党中央的领导地位，挽救了党、挽救了红军</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 抗战 -->
+    <div class="timeline-era">
+      <div class="era-year">1931/1937–1945</div>
+      <div class="era-title">抗日战争时期</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-name">全民族抗战</div>
+          <div class="event-info">1931年"九一八"事变 → 东北沦陷</div>
+          <div class="event-info">1937年"七七"事变 → 全面抗战开始</div>
+          <div class="event-info">1937年洛川会议：全面抗战路线，发动群众</div>
+          <div class="event-result">抗日民族统一战线形成<br>中共是中流砥柱 · 毛泽东发表《论持久战》</div>
+        </div>
+        <div class="era-event">
+          <div class="event-name">1945年 抗战胜利</div>
+          <div class="event-result">台湾回归祖国 · 中国国际地位提升</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 解放战争 -->
+    <div class="timeline-era">
+      <div class="era-year">1945–1949</div>
+      <div class="era-title">解放战争时期</div>
+      <div class="era-details">
+        <div class="era-event">
+          <div class="event-name">重庆谈判（1945）→ 政治协商会议</div>
+          <div class="event-info">1946年国民党进攻中原解放区 → 内战全面爆发</div>
+          <div class="event-info">1947年刘邓大军挺进大别山 → 战略进攻转折</div>
+          <div class="event-info">三大战役（辽沈·淮海·平津）：基本消灭国民党主力</div>
+          <div class="event-result">推翻三座大山（帝国主义·封建主义·官僚资本主义）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新中国 -->
+    <div class="timeline-era milestone">
+      <div class="era-year" style="color:var(--accent-history)">1949.10.1</div>
+      <div class="era-title">🇨🇳 中华人民共和国成立</div>
+      <div class="era-desc">毛泽东在天安门城楼宣布新中国成立<br>意义：中国人民从此站起来了！新民主主义革命取得基本胜利</div>
+    </div>
+  </div>
+
+  <!-- 历史意义总结 -->
+  <div class="formula-box fade-in" style="margin-top:3rem;border-color:rgba(239,68,68,0.2)">
+    <h3 style="color:var(--accent-history)">📌 近代史复习重点</h3>
+    <div class="formula-grid">
+      <div class="formula-card" style="border-color:var(--accent-history)">
+        <div class="card-title" style="color:var(--accent-history)">🏛️ 各阶级探索对比</div>
+        <div class="formula-line">农民阶级 → 太平天国 → 失败（局限性）</div>
+        <div class="formula-line">地主阶级 → 洋务运动 → 失败（甲午战争）</div>
+        <div class="formula-line">资产阶级维新派 → 戊戌变法 → 失败（道路不通）</div>
+        <div class="formula-line">资产阶级革命派 → 辛亥革命 → 未完成反帝反封</div>
+        <div class="formula-line">无产阶级 → 中共领导 → 新中国成立 ✓</div>
+        <div class="formula-tip">💡 核心结论：只有无产阶级才能救中国</div>
+      </div>
+      <div class="formula-card" style="border-color:var(--accent-history)">
+        <div class="card-title" style="color:var(--accent-history)">⚔️ 重要会议速记</div>
+        <div class="formula-line">八七会议(1927)：武装反抗 + 土地革命</div>
+        <div class="formula-line">遵义会议(1935)：生死转折，确立毛领导</div>
+        <div class="formula-line">瓦窑堡会议(1935)：抗日民族统一战线</div>
+        <div class="formula-line">洛川会议(1937)：全面抗战路线</div>
+        <div class="formula-line">七届二中全会(1949)：工作重心从农村转城市</div>
+        <div class="formula-tip">💡 注意：1935是转折年！遵义+瓦窑堡</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 复习小贴士 ===== -->
+<section class="tips-section">
+  <div class="section-header fade-in">
+    <div class="section-number">BONUS</div>
+    <h2 class="section-title" style="color:var(--text-primary)">💡 复习策略建议</h2>
+  </div>
+  <div class="tips-grid">
+    <div class="tip-card fade-in stagger-1">
+      <div class="tip-category" style="color:var(--accent-physics);background:rgba(59,130,246,0.1)">理科</div>
+      <h3>高数 · 物理 · 数模</h3>
+      <p>每天抽 1 小时，<strong>闭眼在草稿纸上推导公式</strong>。理科核心是"手写推导"，不是"眼看"。注意公式的使用条件（收敛半径、适用场景）。</p>
+    </div>
+    <div class="tip-card fade-in stagger-2">
+      <div class="tip-category" style="color:var(--accent-java);background:rgba(249,115,22,0.1)">工科</div>
+      <h3>Java · Web 开发</h3>
+      <p>在 IDE 里<strong>动手敲代码</strong>，把多态执行、集合操作、SQL查询跑通。面试题常考：HashMap底层原理、synchronized vs Lock、GET vs POST。</p>
+    </div>
+    <div class="tip-card fade-in stagger-3">
+      <div class="tip-category" style="color:var(--accent-history);background:rgba(239,68,68,0.1)">文科</div>
+      <h3>中国近代史纲要</h3>
+      <p>每天睡前 20 分钟过时间轴。重点记忆：<strong>各阶级局限性</strong>、<strong>重要会议时间线</strong>、<strong>历史意义</strong>。用"哪个阶级+做了什么+结果如何"框架记忆。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p>期末复习通关地图 · 祝你全线高分通关 🎯</p>
+</footer>
+
+<a href="#" class="back-to-top" id="backToTop" title="回到顶部">↑</a>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('show', window.scrollY > 600);
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

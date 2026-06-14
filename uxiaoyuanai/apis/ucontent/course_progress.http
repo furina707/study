@@ -1,0 +1,4 @@
+### UContent - 查询课程进度
+
+GET https://ucontent.unipus.cn/course/api/v2/course_progress/{{course_id}}/{{open_id}}/default
+X-Annotator-Auth-Token: {{jwt_token}}

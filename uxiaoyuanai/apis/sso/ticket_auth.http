@@ -1,0 +1,4 @@
+### SSO - Ticket认证
+### 使用 serviceTicket 建立 session
+
+GET https://u.unipus.cn/user/comm/login?school_id=&ticket={{service_ticket}}

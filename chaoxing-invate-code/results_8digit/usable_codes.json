@@ -1,0 +1,49 @@
+{
+  "type": "usable",
+  "count": 4,
+  "results": [
+    {
+      "code": "10142999",
+      "status": 200,
+      "length": 6369,
+      "title": "加入课程",
+      "text": "",
+      "category": "usable",
+      "courseName": "标题要长的课程名称",
+      "className": "测试\u0026k778课堂",
+      "teacherName": "我"
+    },
+    {
+      "code": "10366467",
+      "status": 200,
+      "length": 6331,
+      "title": "加入课程",
+      "text": "",
+      "category": "usable",
+      "courseName": "班级名称",
+      "className": "班级名称"
+    },
+    {
+      "code": "10628923",
+      "status": 200,
+      "length": 6360,
+      "title": "加入课程",
+      "text": "",
+      "category": "usable",
+      "courseName": "妇产科",
+      "className": "22中护5班",
+      "teacherName": "许小桃"
+    },
+    {
+      "code": "10666811",
+      "status": 200,
+      "length": 6340,
+      "title": "加入课程",
+      "text": "",
+      "category": "usable",
+      "courseName": "课程名称",
+      "className": "默认班级",
+      "teacherName": "韩方琳"
+    }
+  ]
+}

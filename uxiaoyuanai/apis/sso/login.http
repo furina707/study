@@ -1,0 +1,16 @@
+### SSO 登录
+### 获取 serviceTicket 和 openId
+
+POST https://sso.unipus.cn/sso/0.1/sso/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+
+{
+  "service": "https://u.unipus.cn/user/comm/login?school_id=",
+  "username": "17716841865",
+  "password": "ff@00000",
+  "captcha": "",
+  "rememberMe": "on",
+  "captchaCode": "",
+  "encodeCaptha": ""
+}

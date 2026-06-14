@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+UContent - 查询单元进度
+"""
+
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from config import *
+
+def get_unit_progress(unit_id: str, course_id: str = None, 
+                      open_id: str = None, jwt_token: str = None) -> dict:
+    """
+    查询单元进度
+    
+    Args:
+        unit_id: 单元ID
+        course_id: 课程ID
+        open_id: 用户OpenID
+        jwt_token: JWT Token
+    
+    Returns:
+        dict: {"success": bool, "leafs": dict, "completed": int, "incomplete": int}
+    """
+    course_id = course_id or COURSE_ID
+    open_id = open_id or OPEN_ID
+    jwt_token = jwt_token or generate_jwt(open_id)
+    
+    url = f"{UCONTENT_URL}/course/api/v2/course_progress/{course_id}/{unit_id}/{open_id}/default"
+    
+    session = create_session(jwt_token)
+    resp = session.get(url)
+    data = print_response(f"UContent - 单元进度 (unit: {unit_id})", resp)
+    
+    if data and data.get("code") == 0:
+        leafs = data.get("data", {}).get("leafs", {})
+        completed = sum(1 for v in leafs.values() if v.get("state", {}).get("pass") == 1)
+        incomplete = len(leafs) - completed
+        
+        print_result(True, f"单元进度: {completed}/{len(leafs)} 已完成")
+        return {
+            "success": True, 
+            "leafs": leafs,
+            "completed": completed,
+            "incomplete": incomplete,
+            "total": len(leafs)
+        }
+    
+    print_result(False, "获取单元进度失败")
+    return {"success": False}
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="查询单元进度")
+    parser.add_argument("-u", "--unit_id", required=True, help="单元ID")
+    parser.add_argument("-c", "--course_id", help="课程ID")
+    args = parser.parse_args()
+    
+    get_unit_progress(args.unit_id, args.course_id)

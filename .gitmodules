@@ -1,0 +1,3 @@
+[submodule "chaoxing"]
+	path = chaoxing
+	url = https://github.com/Samueli924/chaoxing.git
