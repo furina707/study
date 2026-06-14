@@ -1,13 +1,12 @@
 package main
 
 import (
-	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"math/rand"
+	"net"
 	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -15,6 +14,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"golang.org/x/net/proxy"
 )
 
 const (
@@ -23,12 +24,14 @@ const (
 	MobileUA = "Dalvik/2.1.0 (Linux; U; Android 16; 23054RA19C Build/BP2A.250605.031.A2)"
 
 	Workers      = 5000
-	BatchSize    = 2000
 	ReqTimeout   = 5 * time.Second
 	MaxRetries   = 1
 	RetryDelay   = 300 * time.Millisecond
 	SaveInterval = 500
 	ShowInterval = 1000
+
+	// Xray 本地 SOCKS5 代理地址
+	Socks5Proxy = "127.0.0.1:1080"
 )
 
 var cookies = []*http.Cookie{
@@ -68,59 +71,6 @@ var (
 	expiredFile  string
 	invalidFile  string
 )
-
-// ProxyPool 代理池
-type ProxyPool struct {
-	proxies []string
-	mu      sync.RWMutex
-	idx     int
-}
-
-// NewProxyPool 创建代理池
-func NewProxyPool(proxies []string) *ProxyPool {
-	return &ProxyPool{proxies: proxies}
-}
-
-// GetProxy 获取下一个代理
-func (p *ProxyPool) GetProxy() string {
-	if len(p.proxies) == 0 {
-		return ""
-	}
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	proxy := p.proxies[p.idx]
-	p.idx = (p.idx + 1) % len(p.proxies)
-	return proxy
-}
-
-// GetRandomProxy 随机获取代理
-func (p *ProxyPool) GetRandomProxy() string {
-	if len(p.proxies) == 0 {
-		return ""
-	}
-	p.mu.RLock()
-	defer p.mu.RUnlock()
-	return p.proxies[rand.Intn(len(p.proxies))]
-}
-
-// LoadProxies 从文件加载代理列表
-func LoadProxies(filename string) ([]string, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var proxies []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line != "" && !strings.HasPrefix(line, "#") {
-			proxies = append(proxies, line)
-		}
-	}
-	return proxies, scanner.Err()
-}
 
 func init() {
 	dir, _ := os.Getwd()
@@ -253,7 +203,7 @@ func extractInfo(html string) (string, string, string) {
 	return course, class, teacher
 }
 
-func testCode(code string, client *http.Client, proxyPool *ProxyPool) Result {
+func testCode(code string, client *http.Client) Result {
 	targetURL := fmt.Sprintf("%s%s?inviteCode=%s", BaseURL, Endpoint, code)
 	for attempt := 0; attempt <= MaxRetries; attempt++ {
 		req, _ := http.NewRequest("GET", targetURL, nil)
@@ -261,46 +211,7 @@ func testCode(code string, client *http.Client, proxyPool *ProxyPool) Result {
 		for _, c := range cookies {
 			req.AddCookie(c)
 		}
-		
-		// 使用代理
-		if proxyPool != nil {
-			proxy := proxyPool.GetRandomProxy()
-			if proxy != "" {
-				proxyURL, err := url.Parse(proxy)
-				if err == nil {
-					transport := &http.Transport{
-						Proxy: http.ProxyURL(proxyURL),
-					}
-					proxyClient := &http.Client{Transport: transport, Timeout: ReqTimeout}
-					resp, err := proxyClient.Do(req)
-					if err != nil {
-						if attempt < MaxRetries {
-							time.Sleep(RetryDelay * time.Duration(1<<attempt))
-							continue
-						}
-						return Result{Code: code, Category: "invalid"}
-					}
-					body, _ := io.ReadAll(resp.Body)
-					resp.Body.Close()
-					html := string(body)
-					cat := classifyResponse(html)
-					r := Result{
-						Code: code, Status: resp.StatusCode, Length: len(html),
-						Title: extractTag(html, "title"), Category: cat,
-					}
-					if idx := strings.Index(html, `blankTips">`); idx != -1 {
-						if end := strings.Index(html[idx:], "</p>"); end != -1 {
-							r.Text = html[idx+11 : idx+end]
-						}
-					}
-					if cat == "usable" {
-						r.CourseName, r.ClassName, r.TeacherName = extractInfo(html)
-					}
-					return r
-				}
-			}
-		}
-		
+
 		resp, err := client.Do(req)
 		if err != nil {
 			if attempt < MaxRetries {
@@ -330,6 +241,30 @@ func testCode(code string, client *http.Client, proxyPool *ProxyPool) Result {
 	return Result{Code: code, Category: "invalid"}
 }
 
+// createSocks5Client 创建通过 SOCKS5 代理的 HTTP 客户端
+func createSocks5Client(proxyAddr string) (*http.Client, error) {
+	// 创建 SOCKS5 代理 dialer
+	dialer, err := proxy.SOCKS5("tcp", proxyAddr, nil, proxy.Direct)
+	if err != nil {
+		return nil, fmt.Errorf("创建 SOCKS5 代理失败: %w", err)
+	}
+
+	// 创建自定义 transport
+	transport := &http.Transport{
+		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return dialer.Dial(network, addr)
+		},
+		MaxIdleConns:        Workers,
+		MaxIdleConnsPerHost: Workers,
+		IdleConnTimeout:     90 * time.Second,
+	}
+
+	return &http.Client{
+		Transport: transport,
+		Timeout:   ReqTimeout,
+	}, nil
+}
+
 func main() {
 	tested, lastCode := loadProgress()
 	start := 10000000
@@ -341,6 +276,7 @@ func main() {
 	total := end - start + 1
 	fmt.Printf("[INFO] 测试范围: %08d - %08d\n", start, end)
 	fmt.Printf("[INFO] 并发数: %d\n", Workers)
+	fmt.Printf("[INFO] SOCKS5 代理: %s\n", Socks5Proxy)
 	fmt.Printf("[INFO] 待测试: %d 个\n", total)
 	fmt.Println(strings.Repeat("=", 70))
 
@@ -348,24 +284,13 @@ func main() {
 	expiredCodes := loadResults(expiredFile)
 	invalidCodes := loadResults(invalidFile)
 
-	// 共享 HTTP 客户端（连接池）
-	transport := &http.Transport{
-		MaxIdleConns:        Workers,
-		MaxIdleConnsPerHost: Workers,
-		IdleConnTimeout:     90 * time.Second,
-		DisableKeepAlives:   false,
+	// 创建通过 SOCKS5 代理的 HTTP 客户端
+	client, err := createSocks5Client(Socks5Proxy)
+	if err != nil {
+		fmt.Printf("[ERROR] %v\n", err)
+		os.Exit(1)
 	}
-	client := &http.Client{Transport: transport, Timeout: ReqTimeout}
-
-	// 加载代理池
-	var proxyPool *ProxyPool
-	proxies, err := LoadProxies("proxies.txt")
-	if err == nil && len(proxies) > 0 {
-		proxyPool = NewProxyPool(proxies)
-		fmt.Printf("[INFO] 代理池已加载: %d 个代理\n", len(proxies))
-	} else {
-		fmt.Printf("[INFO] 未使用代理池\n")
-	}
+	fmt.Printf("[INFO] SOCKS5 代理连接成功\n")
 
 	// 初始化计数器，加上已加载的结果
 	var count int64 = int64(len(usableCodes) + len(expiredCodes) + len(invalidCodes))
@@ -444,7 +369,7 @@ func main() {
 		go func(c string) {
 			defer wg.Done()
 			defer func() { <-sem }()
-			r := testCode(c, client, proxyPool)
+			r := testCode(c, client)
 			resultCh <- taskResult{code: c, result: r}
 		}(code)
 	}
